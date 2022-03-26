@@ -17,40 +17,57 @@ void quicksort(vector<int>& numbers, int start, int end);
 int partition(vector<int>& numbers, int start, int end);
 // Swap the values of two variables (using references)
 void swap(int& left, int& right);
+// Array to store the recorded times
+double times[16]; 
 
 int main()
 {
-  int listsCount = 8;         // How many lists would you like to load and sort?
-  int listLength = 100'000;   // How many numbers are in each list?
-  vector<vector<int>> randLists(listsCount);
-  
-  cout << "\nQUICKSORT SINGLE THREADED\n";
-  cout << "Loading random number text files..\n";
+    int listsCount = 16;         // How many lists would you like to load and sort? PLEASE DONT DO MORE THAN 16 BECAUSE I HAVE USED AN ARRAY TO SAVE THE TIMES
+    int listLength = 100'000;   // How many numbers are in each list?
+    vector<vector<int>> randLists(listsCount);
 
-  //Allocate some nice big vectors and load 100K randoms into each
-  for (int i = 0; i < listsCount; i++)
-  {
-    randLists[i] = (vector<int>(listLength,0));  // create 100,000 integer array
-    // Load 100,000 random numbers from a text file into the vector
-    loadRandsFile(randLists[i], "../randoms/100K_rands_" + to_string(i) + ".txt");
-  }
-  cout << "\nNow sorting " << listsCount << " lists of " << listLength << " random integers..\n";
-  // Create a precision timer and start timing
-  dmac::Timer timer;
-  timer.start();
-  // Sorts our lists
-  for (int i = 0; i < listsCount; i++)
-  {
-    quicksort(randLists[i], 0, randLists[i].size()-1);
-  }
-  timer.stop();
 
-  cout << "\n---------------------------------------\n";
-  cout << "Lists sorted! \n";
-  cout << "Total sort time: " << timer.timeTakenMilli() << " milliseconds \n";
-  cout << "---------------------------------------\n";
-  //writeRandsFile(randLists[0], "rands0_out.txt");
+    cout << "\nQUICKSORT SINGLE THREADED\n";
+    cout << "Loading random number text files..\n";
+
+    //Allocate some nice big vectors and load 100K randoms into each
+    for (int i = 0; i < listsCount; i++)
+    {
+        randLists[i] = (vector<int>(listLength, 0));  // create 100,000 integer array
+        // Load 100,000 random numbers from a text file into the vector
+        loadRandsFile(randLists[i], "../randoms/100K_rands_" + to_string(i) + ".txt");
+    }
+    cout << "\nNow sorting " << listsCount << " lists of " << listLength << " random integers..\n";
+    // Create a precision timers and start timing
+    dmac::Timer timer;
+    dmac::Timer timer2;
+
+    // timer one records the total time. this could be done by adding all the values of timer two, but CBF?!..
+    timer.start();
+    // Sorts our lists
+    for (int i = 0; i < listsCount; i++)
+    {
+        // second timer to count each individual sort time
+        if (i < 16) {
+            timer2.start();
+            quicksort(randLists[i], 0, randLists[i].size() - 1);
+            timer2.stop(); times[i] = timer2.timeTakenMilli();
+        }
+    }
+    timer.stop();
+    
+    cout << "\n---------------------------------------\n";
+    cout << "Lists sorted! \n";
+    // output the the recoreded time for each list up to a maximum of 16
+    for (int i = 0; i < 16; i++) {
+        cout << "Time " << i + 1 << ": " << times[i] << endl;
+    }
+    cout << "Total sort time: " << timer.timeTakenMilli() << " milliseconds \n";
+    cout << "---------------------------------------\n";
+    //writeRandsFile(randLists[0], "rands0_out.txt");
+    
 }
+
 
 int loadRandsFile(vector<int>& destination, string fileName)
 {
