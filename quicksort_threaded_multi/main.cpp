@@ -4,6 +4,7 @@
 #include <vector>
 #include "Timer.h"
 #include <thread>
+#include <iomanip>
 using namespace std;
 
 // There are files holding sets of 100,000 random numbers in ../randoms/
@@ -18,14 +19,14 @@ void quicksort(vector<int>& numbers, int start, int end);
 int partition(vector<int>& numbers, int start, int end);
 // Swap the values of two variables (using references)
 void swap(int& left, int& right);
-void multiThreadSort(int* listsCount, vector<vector<int>>* randLists, vector <double>* times, int i);
+void multiThreadSort(int* listsCount, vector<vector<int>>* randLists, vector <float>* times, int i);
 
 int main()
 {
     int listsCount = 16;         // How many lists would you like to load and sort?
     int listLength = 100'000;    // How many numbers are in each list?
     vector<vector<int>> randLists(listsCount);
-    vector <double> times;
+    vector <float> times;
     double timeTotal = 0;
     vector <thread> threads;
 
@@ -45,7 +46,7 @@ int main()
     for (int i = 0; i < listsCount; i++) {
         threads.push_back(thread(multiThreadSort, &listsCount, &randLists, &times, i));
     }
-    for (int i = 0; i < listsCount; i++) {
+    for (int i = 0; i < threads.size(); i++) {
         if(threads.at(i).joinable() == true)
             threads.at(i).join();
     }
@@ -56,16 +57,17 @@ int main()
     // output the the recoreded time for each list to be sorted and calculate the total time
 
     for (int i = 0; i < times.size(); i++) {
-        cout << "Time " << i + 1 << ": " << times[i] << endl;
+        cout << "Time " << i + 1 << ": " << setprecision(18) << times[i] << endl;
         timeTotal += times.at(i);
     }
-    cout << "Total sort time: " << timeTotal << " milliseconds \n";
+    cout << "Total sort time: "  << timeTotal << " milliseconds \n";
     cout << "---------------------------------------\n";
     //writeRandsFile(randLists[0], "rands0_out.txt");
     
 }
 
-void multiThreadSort(int* listsCount, vector<vector<int>>* randLists, vector <double>* times, int i) {
+void multiThreadSort(int* listsCount, vector<vector<int>>* randLists, vector <float>* times, int i) {
+    
     // Create a precision timers
     dmac::Timer timer;
     // Sorts our lists

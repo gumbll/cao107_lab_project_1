@@ -1,3 +1,3 @@
 ﻿  main.cpp
-C:\projects\cao107_lab_project_1\quicksort_threaded_multi\main.cpp(74,57): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+C:\projects\cao107_lab_project_1\quicksort_threaded_multi\main.cpp(76,57): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
   quicksort_multi_vec.vcxproj -> C:\projects\cao107_lab_project_1\quicksort_threaded_multi\x64\Debug\quicksort_multi_vec.exe
