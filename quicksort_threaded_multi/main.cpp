@@ -26,7 +26,7 @@ int main()
     int listsCount = 16;         // How many lists would you like to load and sort?
     int listLength = 100'000;    // How many numbers are in each list?
     vector<vector<int>> randLists(listsCount);
-    vector <float> times;
+    vector <float> times(listsCount);
     double timeTotal = 0;
     vector <thread> threads;
 
@@ -49,6 +49,9 @@ int main()
     for (int i = 0; i < threads.size(); i++) {
         if(threads.at(i).joinable() == true)
             threads.at(i).join();
+        else {
+            cout << "thread not joinable" << endl;
+        }
     }
 
     cout << "\n---------------------------------------\n";
@@ -62,7 +65,7 @@ int main()
     }
     cout << "Total sort time: "  << timeTotal << " milliseconds \n";
     cout << "---------------------------------------\n";
-    //writeRandsFile(randLists[0], "rands0_out.txt");
+    writeRandsFile(randLists[0], "rands0_out.txt");
     
 }
 
@@ -73,9 +76,9 @@ void multiThreadSort(int* listsCount, vector<vector<int>>* randLists, vector <fl
     // Sorts our lists
 
     timer.start();
-    quicksort(randLists->at(i), 0, randLists->size() - 1);
+    quicksort(randLists->at(i), 0, randLists->at(i).size() - 1);
     timer.stop(); 
-    times->push_back(timer.timeTakenMilli());
+    times->at(i) = (timer.timeTakenMilli());
 }
 
 int loadRandsFile(vector<int>& destination, string fileName)
