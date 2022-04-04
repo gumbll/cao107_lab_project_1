@@ -20,7 +20,7 @@ void swap(int& left, int& right);
 
 int main()
 {
-  int listsCount = 8;         // How many lists would you like to load and sort?
+  int listsCount = 16;         // How many lists would you like to load and sort?
   int listLength = 100'000;   // How many numbers are in each list?
   vector<vector<int>> randLists(listsCount);
   
@@ -49,7 +49,7 @@ int main()
   cout << "Lists sorted! \n";
   cout << "Total sort time: " << timer.timeTakenMilli() << " milliseconds \n";
   cout << "---------------------------------------\n";
-  //writeRandsFile(randLists[0], "rands0_out.txt");
+  writeRandsFile(randLists[0], "rands0_out.txt");
 }
 
 int loadRandsFile(vector<int>& destination, string fileName)
